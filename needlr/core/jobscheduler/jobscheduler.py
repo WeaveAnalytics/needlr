@@ -6,10 +6,8 @@ from needlr._http import FabricResponse
 import uuid
 from needlr.auth.auth import _FabricAuthentication
 #from needlr._http import FabricResponse, FabricException
-from needlr.models.jobscheduler import (
-    ItemSchedule,
-    CreateScheduleRequest
-)
+from needlr.models.jobscheduler import ( ItemSchedules, CreateScheduleRequest )
+
 
 #import json
 #from pydantic import BaseModel
@@ -46,19 +44,39 @@ class _JobSchedulerClient():
         self._auth = auth
         self._base_url = base_url
 
-    def list_item_schedules(self, workspace_id:uuid.UUID, item_id:uuid.UUID, job_type:str, **kwargs) -> ItemSchedule:
+    def list_item_schedules(self, workspace_id:uuid.UUID, item_id:uuid.UUID, job_type:str, **kwargs) -> Iterator[ItemSchedules]:
             """
             Get scheduling settings for one specific item.
 
+            Currently supported job types:
+            - RunNotebook
+            - Pipeline
+
+            Future support for:
+            - SparkJob
+
             Args:
-                **kwargs: Additional keyword arguments that can be passed to customize the request.
+                workspace_id (uuid.UUID): The ID of the workspace.
+                item_id (uuid.UUID): The ID of the item.
+                job_type (str): The type of job. Must be either "RunNotebook" or "Pipeline".
 
             Returns:
-                Iterator[Workspace]: An iterator that yields Workspace objects representing each workspace.
+                Iterator[ItemSchedules]: An iterator that yields Workspace objects representing each ItemSchedule.
 
             Reference:
-            - [List Workspaces](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/list-workspaces?tabs=HTTP)
+            - [List Item Schedules](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-schedules?tabs=HTTP)
             """
+
+            # Check that job_type is RunNotebook or Pipeline
+            if job_type not in ["RunNotebook", "Pipeline"]:
+                raise ValueError("job_type must be either 'RunNotebook' or 'Pipeline'")
+
+            # Check that workspace_id and item_id are valid UUIDs
+            if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID):
+                raise ValueError("workspace_id and item_id must be valid UUIDs")
+
+            # Call the _get_http function to retrieve the list of workspaces
+
             resp = _http._get_http(
                 url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/{job_type}/schedules",
                 auth= self._auth,
