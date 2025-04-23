@@ -167,9 +167,8 @@ class _ReflexClient():
             Reference:
                 [List Reflexes](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/list-reflexes?tabs=HTTP)
             """
-            flag = f'?continuationToken={continuation_token}' if continuation_token else ''
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/reflexes{flag}",
+                url = f"{self._base_url}workspaces/{workspace_id}/reflexes",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
