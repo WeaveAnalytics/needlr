@@ -6,7 +6,7 @@ from needlr._http import FabricResponse
 import uuid
 from needlr.auth.auth import _FabricAuthentication
 #from needlr._http import FabricResponse, FabricException
-from needlr.models.jobscheduler import ( ItemSchedules, CreateScheduleRequest )
+from needlr.models.jobscheduler import ( ItemSchedules, CreateScheduleRequest, ItemJobInstance)
 
 
 #import json
@@ -55,7 +55,7 @@ class _JobSchedulerClient():
             Future support for:
             - SparkJob
 
-            Args:
+            Parameters:
                 workspace_id (uuid.UUID): The ID of the workspace.
                 item_id (uuid.UUID): The ID of the item.
                 job_type (str): The type of job. Must be either "RunNotebook" or "Pipeline".
@@ -100,6 +100,10 @@ class _JobSchedulerClient():
         """
         Create a new schedule for an item.
 
+        Currently supported job types:
+        - RunNotebook
+        - Pipeline
+
         Parameters:
         - item_id: The item ID.
         - job_type:  The job type.
@@ -114,7 +118,13 @@ class _JobSchedulerClient():
         - [Create Item Schedule](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/create-item-schedule?tabs=HTTP)
         """
 
-        # TODO Check for nulls and empty strings
+        # Check that job_type is RunNotebook or Pipeline
+        if job_type not in ["RunNotebook", "Pipeline"]:
+            raise ValueError("job_type must be either 'RunNotebook' or 'Pipeline'")
+
+        # Check that workspace_id and item_id are valid UUIDs
+        if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID):
+            raise ValueError("workspace_id and item_id must be valid UUIDs")
 
         # create the VirtualNetworkAzureResource object
         cronVar = {"endDateTime":endDateTime, "interval":interval, "localTimeZoneId":localTimeZoneId,  "startDateTime":startDateTime, "type":"Cron"}
@@ -148,8 +158,46 @@ class _JobSchedulerClient():
         Reference:
         - [Cancel Item Job Instance](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/cancel-item-job-instance?tabs=HTTP)
         """
+
+        # Check that workspace_id and item_id are valid UUIDs
+        if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID) or not isinstance(job_instance_id, uuid.UUID):
+            raise ValueError("workspace_id, item_id, job_instance_id must be valid UUIDs")
+                
         resp = _http._post_http(
             url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/instances/{job_instance_id}/cancel",
             auth=self._auth
         )
         return resp
+    
+
+    def list_item_job_instances(self, workspace_id:uuid.UUID, item_id:uuid.UUID, **kwargs) -> Iterator[ItemJobInstance]:
+            """
+            Returns a list of job instances for the specified item.
+
+            Parameters:
+                workspace_id (uuid.UUID): The ID of the workspace.
+                item_id (uuid.UUID): The ID of the item.
+
+            Returns:
+                Iterator[ItemJobInstances]: An iterator that yields Workspace objects representing each ItemJobInstance.
+
+            Reference:
+            - [List Item Job Instancens](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP)
+            """
+
+            # Check that workspace_id and item_id are valid UUIDs
+            if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID):
+                raise ValueError("workspace_id and item_id must be valid UUIDs")
+
+            # Call the _get_http function to retrieve the list of workspaces
+
+            resp = _http._get_http_paged(
+            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/instances",
+            auth= self._auth,
+            items_extract=lambda x:x["value"],
+            **kwargs
+        )
+            for page in resp:
+                for item in page.items:
+                    yield ItemJobInstance(**item)    
+
