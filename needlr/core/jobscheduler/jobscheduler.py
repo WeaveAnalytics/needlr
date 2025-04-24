@@ -201,3 +201,43 @@ class _JobSchedulerClient():
                 for item in page.items:
                     yield ItemJobInstance(**item)    
 
+    def run_on_demand_item_job( self, workspace_id:uuid.UUID, item_id:uuid.UUID, job_type:str) -> FabricResponse:
+        """
+        Run on-demand item job instance.
+
+        Currently supported job types:
+        - RunNotebook
+        - Pipeline
+
+        Future support for:
+        - SparkJob
+
+        Parameters:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            item_id (uuid.UUID): The ID of the item.
+            job_type (str): The type of job. Must be either "RunNotebook" or "Pipeline".
+
+        Returns:
+            Iterator[ItemSchedules]: An iterator that yields Workspace objects representing each ItemSchedule.
+
+        Reference:
+        - [List Item Schedules](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-schedules?tabs=HTTP)
+        """
+
+        # Check that job_type is RunNotebook or Pipeline
+        if job_type not in ["RunNotebook", "Pipeline"]:
+            raise ValueError("job_type must be either 'RunNotebook' or 'Pipeline'")
+
+        # Check that workspace_id and item_id are valid UUIDs
+        if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID):
+            raise ValueError("workspace_id and item_id must be valid UUIDs")
+
+        
+        url=f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/instances/?jobType={job_type}"
+        
+        resp = _http._post_http(
+            url=url,
+            auth=self._auth
+        )
+
+        return resp
