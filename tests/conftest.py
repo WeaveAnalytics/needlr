@@ -75,17 +75,23 @@ def testParameters():
         'kqlDashboard_description': 'KQL Dashboard Description',
         'kqlDashboard_format': 'Format of the KQL Dashboard public definition',
         'kqlDashboard_continuation_token': 'Optional | A token for retrieving the next page of results',
-        'kqlDashboard_updateMetadata': 'Optional | Boolean | Update Item Metadata'
+        'kqlDashboard_updateMetadata': 'Optional | Boolean | Update Item Metadata',
+        'data_pipeline_id': 'f031721f-aa0a-4927-8e90-253e9373dfac', # from the dev workspace
+        'notebook_id': 'cc66598b-805e-4e9d-bd1a-07da11ba7514' # from the dev workspace
+
+        
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
     if os.getenv('APP_ID'):
+        print("Using Service Principal Authentication")
         authorization = auth.FabricServicePrincipal(
             client_id=os.getenv('APP_ID'),
             client_secret=os.getenv('APP_SECRET'),
             tenant_id=os.getenv('TENANT_ID')
         )
     else:
+        print("Using Service interactive Authentication")
         authorization = auth.FabricInteractiveAuth()
     return FabricClient(auth=authorization)
 
