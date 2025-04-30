@@ -75,18 +75,16 @@ class _JobSchedulerClient():
             if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID):
                 raise ValueError("workspace_id and item_id must be valid UUIDs")
 
-            # Call the _get_http function to retrieve the list of workspaces
-
-            resp = _http._get_http(
-                url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/{job_type}/schedules",
-                auth= self._auth,
-                **kwargs
+            resp = _http._get_http_paged(
+            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/{job_type}/schedules",
+            auth= self._auth,
+            items_extract=lambda x:x["value"],
+            **kwargs 
             )
-            localBody = resp.body
 
-            listItemsScheduleResponse = ItemSchedules(**localBody)
-
-            return listItemsScheduleResponse
+            for page in resp:
+                for item in page.items:
+                    yield ItemSchedules(**item)
 
     def create_item_schedule_cron( self, item_id: uuid.UUID, 
                         job_type: str, 
@@ -189,17 +187,20 @@ class _JobSchedulerClient():
             if not isinstance(workspace_id, uuid.UUID) or not isinstance(item_id, uuid.UUID):
                 raise ValueError("workspace_id and item_id must be valid UUIDs")
 
-            # Call the _get_http function to retrieve the list of workspaces
+            resp = _http._get_http(
+                url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/instances",
+                auth= self._auth,
+                **kwargs
+            )
 
-            resp = _http._get_http_paged(
-            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/jobs/instances",
-            auth= self._auth,
-            items_extract=lambda x:x["value"],
-            **kwargs
-        )
-            for page in resp:
-                for item in page.items:
-                    yield ItemJobInstance(**item)    
+            # convert the None to 'None' for the response due to the impedence mismatch between the API and the model
+            # None va 'None'
+            # TODO: Find a better way of handling this and document this needed.
+            for k,v in resp.body.items():
+                if v is None:
+                    resp.body[k] = 'None'
+
+            return ItemJobInstance(**resp.body)                        
 
     def run_on_demand_item_job( self, workspace_id:uuid.UUID, item_id:uuid.UUID, job_type:str) -> FabricResponse:
         """
