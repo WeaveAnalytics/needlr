@@ -49,7 +49,7 @@ class _LabelClient():
         Returns:
             FabricResponse: The response from the API call.
         """
-        url = "https://api.fabric.microsoft.com/v1/admin/items/bulkRemoveLabels"
+        url = f"{self._base_url}/admin/items/bulkRemoveLabels"
         body = {"items": item_list}
         return _http._post_http(url=url, auth=self._auth, json=body)
     
