@@ -4,7 +4,7 @@ from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
 import uuid
-
+import json 
 from needlr.models.workspace import _Principal, UserPrincipal
 # Intentionally blank to avoid any import coming from here
 __all__ = [
@@ -51,8 +51,7 @@ class _LabelClient():
         """
         url = "https://api.fabric.microsoft.com/v1/admin/items/bulkRemoveLabels"
         body = {"items": item_list}
-        print(body)
-        return _http._post_http(url=url, auth=self._auth, params=body)
+        return _http._post_http(url=url, auth=self._auth, json=body)
     
     def bulk_set(self, item_list: list[dict], label_id: uuid.UUID,assignmentMethod:str = None, delegatedPrincipal:_Principal = None) -> FabricResponse:
         """
@@ -73,16 +72,18 @@ class _LabelClient():
             FabricResponse: The response from the API call. 
             """
         url = "https://api.fabric.microsoft.com/v1/admin/items/bulkSetLabels"
-        body = {
+        body ={ 
             "items": item_list,
             "labelId": str(label_id),
         }
         if assignmentMethod is not None:
             body["assignmentMethod"] = assignmentMethod
+        else:
+            body["assignmentMethod"] = "Standard"
         if delegatedPrincipal is not None:
             if isinstance(delegatedPrincipal, UserPrincipal):
                 body["delegatedPrincipal"] = {
                     "id": str(delegatedPrincipal.id),
                     "type": "User"
                 }
-        return _http._post_http(url=url, auth=self._auth, params=body)
+        return _http._post_http(url=url, auth=self._auth, json=body)
