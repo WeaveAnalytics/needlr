@@ -265,3 +265,132 @@ class CreateScheduleRequest(BaseModel):
     enabled: bool = None
     configuration: Union[CronScheduleConfig, DailyScheduleConfig, WeeklyScheduleConfig] = None
     
+class InvokeType(str, Enum):
+    """
+    [InvokeType](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#invoketype)
+    
+    Manual - string - Job is invoked manually
+    Scheduled - string - Job is scheduled
+
+
+    """
+    Manual = 'Manual'
+    Scheduled = 'Scheduled'
+
+class ErrorRelatedResource(BaseModel):
+    """
+
+    The error related resource details object.
+
+    [ErrorRelatedResource](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#errorrelatedresource)
+    
+    resourceId - string - The resource ID that's involved in the error.
+    resourceType - string - The type of the resource that's involved in the error.
+
+    """
+    resourceId: str = None
+    resourceType: str = None
+
+class ErrorResponseDetails(BaseModel):
+    """
+
+    The error response details.
+
+    [ErrorResponseDetails](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#errorresponsedetails)
+    
+    errorCode - string - A specific identifier that provides information about an error condition, allowing for standardized communication between our service and its users.
+    message - string - A human readable representation of the error.
+    relatedResource - ErrorRelatedResource - The error related resource details.
+
+    """
+    errorCode: str = None
+    message: str = None
+    relatedResource: ErrorRelatedResource = None
+
+class ErrorResponse(BaseModel):
+    """
+
+    The error response.
+
+    [ErrorResponse](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#errorresponse)
+    
+    errorCode - string - A specific identifier that provides information about an error condition, allowing for standardized communication between our service and its users.
+    message - string - A human readable representation of the error.
+    moreDetails - ErrorResponseDetails[] - List of additional error details.
+    relatedResource - ErrorRelatedResource - The error related resource details.
+    requestId - string -ID of the request associated with the error.
+
+    
+    """
+    errorCode: str = None
+    message: str = None
+    moreDetails: List[ErrorResponseDetails] = None
+    relatedResource: ErrorRelatedResource = None
+    requestId: str = None
+
+
+
+class Status(str, Enum):
+    """
+
+    The item job status. Additional statuses may be added over time.
+
+    [Status](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#status)
+    
+    Cancelled - string - Job cancelled
+    Completed - string - Job completed
+    Deduped - string - A job instance of the same job type is already running and this job instance is skipped
+    Failed - string- Job failed
+    InProgress - string - Job in progress
+    NotStarted - string - Job not started
+
+    """
+    Cancelled = 'Cancelled'
+    Completed = 'Completed'
+    Deduped = 'Deduped'
+    Failed = 'Failed'
+    InProgress = 'InProgress'
+    NotStarted = 'NotStarted'
+
+class ItemJobInstance(BaseModel):
+    """
+    An object representing item job instance
+
+    [ItemJobinstance](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#itemjobinstance)
+
+    endTimeUtc - string - Job end time in UTC
+    failureReason - ErrorResponse - 
+    id - uuid - Job instance Id
+    invokeType - invokeType - The item job invoke type. Additional invokeTypes may be added over time.
+    itemId - uuid - Item Id
+    jobType - string - Job type
+    rootActivityId - string - Root activity id to trace requests across services
+    startTimeUtc - string - Job start time in UTC
+    status - Status - The item job status. Additional statuses may be added over time.
+
+    """
+
+    endTimeUtc: str = None
+    failureReason: ErrorResponse = None
+    id: uuid.UUID = None
+    invokeType: InvokeType = None
+    itemId: uuid.UUID = None
+    jobType: str = None
+    rootActivityId: str = None
+    startTimeUtc: str = None
+    status: Status = None
+
+
+class ItemJobInstances(BaseModel):
+    """
+    [ItemJobInstances](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/list-item-job-instances?tabs=HTTP#itemjobinstances)
+
+    continuationToken - string - The token for the next result set batch. If there are no more records, it's removed from the response.
+    continuationUri - string - The URI of the next result set batch. If there are no more records, it's removed from the response.
+    value - ItemJobInstance[] - A list of item job instances.
+    
+    """
+
+    continuationToken: str = None
+    continuationUri: str = None
+    value: List[ItemJobInstance] = None    

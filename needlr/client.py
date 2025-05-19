@@ -20,6 +20,10 @@ from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
 from needlr.admin.domain import _DomainClient
 from needlr.admin.label import _LabelClient
+from needlr.datascience.mlmodel import _MLModelClient
+from needlr.datascience.mlexperiment import _MLExperimentClient
+from needlr.dataactivator.reflex.reflex import _ReflexClient
+from needlr.realtimeintelligence.kqldashboard import _KQLDashboardClient
 
 
 
@@ -49,4 +53,8 @@ class FabricClient():
         self.tenant = _TenantClient(auth=auth, base_url=self._base_url)
         self.domain = _DomainClient(auth=auth, base_url=self._base_url)
         self.label = _LabelClient(auth=auth, base_url=self._base_url)
+        self.mlmodel = _MLModelClient(auth=auth, base_url=self._base_url)
+        self.mlexperiment = _MLExperimentClient(auth=auth, base_url=self._base_url)
+        self.reflex = _ReflexClient(auth=auth, base_url=self._base_url)
+        self.kqldashboard = _KQLDashboardClient(auth=auth, base_url=self._base_url)
 
