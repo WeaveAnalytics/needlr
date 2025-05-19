@@ -1,4 +1,4 @@
-"""Module providing a Core Workspace functions."""
+"""Module providing functionality for managing sensitivity labels."""
 
 from needlr._http import FabricResponse
 from needlr import _http
