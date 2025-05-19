@@ -59,18 +59,18 @@ class _LabelClient():
 
         Args:
             item_list (list[dict]): A list of items to set the label on.
-                Each item should be a dictionary containing the following keys:"
-                "id: The ID of the item."
-                "type: The type of the item (e.g., "Workspace", "Item").
+                Each item should be a dictionary containing the following keys:
+                - id: The ID of the item.
+                - type: The type of the item (e.g., "Workspace", "Item").
             label_id (uuid.UUID): The ID of the label to set.
             assignmentMethod (str, optional): The assignment method for the label. Defaults to None.
             delegatedPrincipal (_Principal, optional): The principal to delegate the label assignment to. Defaults to None.
-                Only principals of type 'User' are supported (UserPrincipal)
+                Only principals of type 'User' are supported (UserPrincipal).
                 The default is None, which means no delegation.
-            
-            "Returns:
-            FabricResponse: The response from the API call. 
-            """
+
+        Returns:
+            FabricResponse: The response from the API call.
+        """
         url = "https://api.fabric.microsoft.com/v1/admin/items/bulkSetLabels"
         body ={ 
             "items": item_list,
