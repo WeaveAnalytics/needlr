@@ -3,7 +3,6 @@
 # This is a great way to test your connectivity.
 
 import os
-from dotenv import load_dotenv
 from needlr.auth import FabricServicePrincipal, FabricInteractiveAuth
 from needlr import FabricClient
 
@@ -11,7 +10,6 @@ auth = FabricInteractiveAuth()
 
 # If you're testing with a service principal uncomment this section
 
-# load_dotenv()
 # APP_ID=os.environ.get("APP_ID")
 # TENANT_ID=os.environ.get("TENANT_ID")
 # APP_SECRET=os.environ.get("APP_SECRET")

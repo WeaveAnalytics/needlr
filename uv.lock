@@ -608,7 +608,7 @@ wheels = [
 
 [[package]]
 name = "needlr"
-version = "0.1.6"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "msal" },
@@ -617,7 +617,7 @@ dependencies = [
     { name = "requests" },
 ]
 
-[package.dev-dependencies]
+[package.optional-dependencies]
 dev = [
     { name = "annotated-types" },
     { name = "azure-identity" },
@@ -633,22 +633,18 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "annotated-types", marker = "extra == 'dev'", specifier = "==0.7.0" },
+    { name = "azure-identity", marker = "extra == 'dev'", specifier = ">=1.19.0" },
+    { name = "azure-storage-file-datalake", marker = "extra == 'dev'", specifier = ">=12.18.0" },
     { name = "msal", specifier = ">=1.31.0" },
     { name = "pydantic", specifier = ">=2.8.0" },
     { name = "pyodbc", specifier = ">=5.2.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.4" },
+    { name = "pytest-order", marker = "extra == 'dev'", specifier = "==1.2.1" },
+    { name = "python-dotenv", marker = "extra == 'dev'", specifier = "==1.0.1" },
     { name = "requests", specifier = ">=2.32.3" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "annotated-types", specifier = "==0.7.0" },
-    { name = "azure-identity", specifier = ">=1.19.0" },
-    { name = "azure-storage-file-datalake", specifier = ">=12.18.0" },
-    { name = "pytest", specifier = ">=8.3.4" },
-    { name = "pytest-order", specifier = "==1.2.1" },
-    { name = "python-dotenv", specifier = "==1.0.1" },
-    { name = "ruff", specifier = "==0.7.1" },
-    { name = "sphinx", specifier = ">=7.1.2" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.7.1" },
+    { name = "sphinx", marker = "extra == 'dev'", specifier = ">=7.1.2" },
 ]
 
 [[package]]

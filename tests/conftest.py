@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 import random
 import pytest
 from typing import Generator
@@ -10,10 +9,6 @@ from needlr.models.mlexperiment import MLExperiment
 from needlr.models.reflex import Reflex
 from needlr.models.kqldashboard import KQLDashboard
 import os
-
-# Loading an Environment Variable File with dotenv
-load_dotenv()
-
 
 @pytest.fixture(scope='session')
 def testParameters():
