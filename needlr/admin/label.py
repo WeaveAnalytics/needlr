@@ -53,7 +53,7 @@ class _LabelClient():
         body = {"items": item_list}
         return _http._post_http(url=url, auth=self._auth, json=body)
     
-    def bulk_set(self, item_list: list[dict], label_id: uuid.UUID,assignmentMethod:str = None, delegatedPrincipal:_Principal = None) -> FabricResponse:
+    def bulk_set(self, item_list: list[dict], label_id: uuid.UUID, assignment_method: str = None, delegated_principal: _Principal = None) -> FabricResponse:
         """
         Bulk set labels on items.
 
