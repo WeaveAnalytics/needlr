@@ -4,7 +4,7 @@ from needlr.auth.auth import _FabricAuthentication
 
 import uuid
 
-from needlr.models.lakehouse import Lakehouse
+from needlr.models.lakehouse import Lakehouse, Livy_Session
 from needlr.models.item import Item
 from needlr import _http
 from needlr._http import FabricResponse
@@ -270,3 +270,56 @@ class _LakehouseClient():
             json_par = params
         )
         return resp
+    
+
+    def ls_livy_sessions(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> FabricResponse:
+        """
+        Returns a list of livy sessions from the specified item identifier..
+
+        Args:
+            workspace_id (uuid.UUID): The workspace ID.
+            lakehouse_id (uuid.UUID): The lakehouse ID.
+
+        Returns:
+            FabricResponse: The response.
+
+        Reference:
+        [Get Livy Session](https://learn.microsoft.com/en-us/rest/api/fabric/lakehouse/livy-sessions/list-livy-sessions?tabs=HTTP)
+        """
+        
+        resp = _http._get_http_paged(
+            url = f"{self._base_url}workspaces/{workspace_id}/lakehouses/{lakehouse_id}/livySessions",
+            auth=self._auth,
+            items_extract=lambda x:x["value"]
+        )
+
+        for page in resp:
+                for item in page.items:
+                    yield Livy_Session(**item)
+
+    
+
+
+    def get_livy_session(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID, livy_id:uuid.UUID) -> FabricResponse:
+        """
+        Returns properties of the specified livy session.
+
+        Args:
+            workspace_id (uuid.UUID): The workspace ID.
+            lakehouse_id (uuid.UUID): The lakehouse ID.
+            livy_id (uuid.UUID): The livy ID.
+
+        Returns:
+            FabricResponse: The response.
+
+        Reference:
+        [Get Livy Session](https://learn.microsoft.com/en-us/rest/api/fabric/lakehouse/livy-sessions/get-livy-session?tabs=HTTP)
+        """
+        
+        resp = _http._get_http(
+            url = f"{self._base_url}workspaces/{workspace_id}/lakehouses/{lakehouse_id}/livySessions/{livy_id}",
+            auth=self._auth
+        )
+
+        return Livy_Session(**resp.body)
+    
