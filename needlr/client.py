@@ -9,6 +9,7 @@ from needlr.datafactory.datapipeline import _DatapipelineClient
 from needlr.datawarehouse.mirroredwarehouse import _MirroredWarehouseClient
 from needlr.datawarehouse.warehouse import _WarehouseClient
 from needlr.dataengineering.lakehouse import _LakehouseClient
+from needlr.dataengineering.onelake import _OneLakeClient
 from needlr.powerbi.dashboard import _DashboardClient
 from needlr.powerbi.datamart import _DatamartClient
 from needlr.powerbi.paginatedreport import _PaginatedReportClient
@@ -27,7 +28,6 @@ from needlr.realtimeintelligence.kqldashboard import _KQLDashboardClient
 
 
 
-
 class FabricClient():
     def __init__(self, auth, **kwargs):
         self._auth = auth
@@ -37,6 +37,7 @@ class FabricClient():
         self.admin_workspaceclient = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)
         self.warehouse = _WarehouseClient(auth=auth, base_url=self._base_url)
         self.lakehouse = _LakehouseClient(auth=auth, base_url=self._base_url)
+        self.onelake = _OneLakeClient(auth=auth, base_url=self._base_url)
         self.mirroredwarehouse = _MirroredWarehouseClient(auth=auth, base_url=self._base_url)
         self.semanticmodel = _SemanticModelClient(auth=auth, base_url=self._base_url)
         self.dashboardclient = _DashboardClient(auth=auth, base_url=self._base_url)

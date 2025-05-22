@@ -24,6 +24,8 @@ class _LakehouseClient():
     * List all tables in the lakehouse > list_tables
     * Load data into a table > load_table
     * Run on demand table maintenance > run_table_maintenance
+    * List all livy sessions in the lakehouse > ls_livy_sessions
+    * Get a specific livy session > get_livy_session
     """
 
     TABLE_LOAD_PATH_TYPE = Literal["File", "Folder"]
