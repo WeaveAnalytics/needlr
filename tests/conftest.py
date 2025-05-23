@@ -77,8 +77,8 @@ def testParameters():
         'kqlDashboard_format': 'Format of the KQL Dashboard public definition',
         'kqlDashboard_continuation_token': 'Optional | A token for retrieving the next page of results',
         'kqlDashboard_updateMetadata': 'Optional | Boolean | Update Item Metadata',
-        'data_pipeline_id': 'f031721f-aa0a-4927-8e90-253e9373dfac', # from the dev workspace
-        'notebook_id': 'cc66598b-805e-4e9d-bd1a-07da11ba7514' # from the dev workspace
+        'data_pipeline_id': os.getenv('DATA_PIPELINE_ID'), # from the dev workspace
+        'notebook_id': os.getenv('NOTEBOOK_ID') # from the dev workspace
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
