@@ -1,5 +1,3 @@
-"""Module providing a Core Capacity Model."""
-
 from enum import Enum
 import uuid
 from pydantic import BaseModel
@@ -12,6 +10,7 @@ class CapacityState(str, Enum):
     """
     Active = 'Active'
     Inactive = 'Inactive'
+
 
 class Capacity(BaseModel):
     """

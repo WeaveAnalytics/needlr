@@ -1,6 +1,6 @@
 import uuid
 from pydantic import BaseModel, Field, AliasChoices, computed_field, create_model
-from typing import Dict, Union, Optional, List
+from typing import Dict, Union, Optional, List, Literal
 
 
 # Union[ModelA, ModelB]
@@ -133,12 +133,12 @@ class Shortcut_Target_Create_AzureBlobStorage(BaseModel):
 
 
 class PermissionItem(BaseModel):
-    attributeName: str
+    attributeName: Literal['Action', 'Path']
     attributeValueIncludedIn: List[str]
 
 
 class DecisionRule(BaseModel):
-    effect: str
+    effect: Literal['Permit']
     permission: List[PermissionItem]
 
 

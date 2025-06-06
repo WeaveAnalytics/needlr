@@ -1,5 +1,3 @@
-"""Module providing Core Capacity functions."""
-
 from collections.abc import Iterator
 from needlr.core.item.item import _ItemClient
 from needlr._http import FabricResponse
@@ -35,27 +33,28 @@ class _CapacityClient():
         self._auth = auth
         self._base_url = base_url    
 
-    def list_capacities(self, **kwargs) -> Iterator[Capacity]:
-            """
-            List Capacities
 
-            Returns a list of capacities the principal can access (either administrator or a contributor)
+    def ls(self, **kwargs) -> Iterator[Capacity]:
+        """
+        List Capacities
 
-            Args:
-                **kwargs: Additional keyword arguments that can be passed to customize the request.
+        Returns a list of capacities the principal can access (either administrator or a contributor)
 
-            Returns:
-                Iterator[Workspace]: An iterator that yields Workspace objects representing each workspace.
+        Args:
+            **kwargs: Additional keyword arguments that can be passed to customize the request.
 
-            Reference:
-            - [List Workspaces](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/list-workspaces?tabs=HTTP)
-            """
-            resp = _http._get_http_paged(
-                url = self._base_url+"capacities",
-                auth= self._auth,
-                items_extract=lambda x:x["value"],
-                **kwargs
-            )
-            for page in resp:
-                for item in page.items:
-                    yield Capacity(**item)
+        Returns:
+            Iterator[Workspace]: An iterator that yields Workspace objects representing each workspace.
+
+        Reference:
+        - [List Workspaces](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/list-workspaces?tabs=HTTP)
+        """
+        resp = _http._get_http_paged(
+            url = self._base_url+"capacities",
+            auth= self._auth,
+            items_extract=lambda x:x["value"],
+            **kwargs
+        )
+        for page in resp:
+            for item in page.items:
+                yield Capacity(**item)
