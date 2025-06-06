@@ -4,12 +4,12 @@ from needlr.auth.auth import _FabricAuthentication
 
 import uuid
 
-from needlr.models.onelake import Shortcut, Shortcut_Target
+from needlr.models.onelake import Shortcut, Shortcut_Target, OneLakeDataAccessRole
 from needlr.models.item import Item
 from needlr import _http
 from needlr._http import FabricResponse
 
-from typing import Literal
+from typing import Literal, List, Iterator
 
 class _OneLakeClient():
     """
@@ -31,7 +31,7 @@ class _OneLakeClient():
         self._auth = auth
         self._base_url = base_url
 
-    def ls_shortcuts(self, workspace_id:uuid.UUID, item_id:str, parent_path:str=None) -> Shortcut:
+    def ls_shortcuts(self, workspace_id:uuid.UUID, item_id:str, parent_path:str=None) -> Iterator[Shortcut]:
         """
         Creates a new lakehouse.
 
@@ -83,7 +83,7 @@ class _OneLakeClient():
         return resp
     
 
-    def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str, target:Shortcut_Target) -> Shortcut:
+    def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str, shortcut_target:Shortcut_Target) -> Shortcut:
         """
         Creates a new shortcut.
 
@@ -104,7 +104,7 @@ class _OneLakeClient():
             "name": shortcut_name,
             "path": shortcut_path,
             "target": {
-                **target
+                **shortcut_target
             }
         }
 
@@ -117,7 +117,7 @@ class _OneLakeClient():
         return resp
     
 
-    def delete_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str) -> Shortcut:
+    def delete_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str) -> FabricResponse:
         """
         Deletes a shortcut.
 
@@ -141,6 +141,80 @@ class _OneLakeClient():
         )
         return resp
     
+
+    def ls_data_access_roles(self, workspace_id:uuid.UUID, item_id:str) -> Iterator[OneLakeDataAccessRole]:
+        
+        resp = _http._get_http(
+            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/dataAccessRoles",
+            auth=self._auth,
+            items_extract=lambda x:x["value"]
+        )
+
+        for item in resp.body.get('value'):
+            yield OneLakeDataAccessRole(**item)
+
+
+    ## THIS DOES NOT WORK YET
+    # def enable_data_access_security(self, workspace_id:uuid.UUID, item_id:str) -> Item:
+    #     """
+    #     Enables or disables data access security for a lakehouse.
+
+    #     Args:
+    #         workspace_id (uuid.UUID): The workspace ID.
+    #         item_id (str): The display name of the lakehouse.
+
+    #     Returns:
+            
+    #     Reference:
+    #     [Enable Data Access Security]()
+    #     """
+        
+    #     resp = _http._post_http(
+    #         url = f"{self._base_url}workspaces/{workspace_id}/artifacts/{item_id}/security/enable",
+    #         auth=self._auth
+    #     )
+        
+    #     return resp.status_code
+
+
+    def create_data_access_role(self, workspace_id:uuid.UUID, item_id:str, roles:List[OneLakeDataAccessRole], dry_run:bool=False) -> FabricResponse:
+        """
+        Creates a new data access role.
+
+        Args:
+            workspace_id (uuid.UUID): The workspace ID.
+            item_id (str): The display name of the lakehouse.
+            role_name (str): The name of the data access role.
+            description (str): The description of the data access role.
+
+        Returns:
+            Item: The created data access role.
+
+        Reference:
+        [Create Data Access Role](https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-data-access-security/create-or-update-data-access-roles?tabs=HTTP)
+        """
+
+        # This has to be the full list of permissions, not just the ones you want to set/update
+        body_existing_roles = self.ls_data_access_roles(workspace_id, item_id)  # Get all the existing roles first
+        
+        body = {"value": []}
+        for role in roles:
+            body.get('value').append(role.model_dump())
+
+        for role_existing in body_existing_roles:
+            if role_existing.name not in [role.name for role in roles]:
+                body['value'].append(role_existing.model_dump())
+                
+        resp = _http._put_http(
+            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/dataAccessRoles{'' if not dry_run else '?dryRun=true'}",
+            auth=self._auth,
+            json=body
+        )
+
+        return resp.status_code
+        
+
+    
     ## This API does not work yet
     # def reset_shortcut_cache(self, workspace_id:uuid.UUID) -> Shortcut:
     #     """
@@ -156,7 +230,7 @@ class _OneLakeClient():
     #         lakehouse: The created lakehouse.
 
     #     Reference:
-    #     [List shortcuts](https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-shortcuts/list-shortcuts?tabs=HTTP)
+    #     [List shortcuts](https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-shortcuts/reset-shortcut-cache?tabs=HTTP)
     #     """
 
 

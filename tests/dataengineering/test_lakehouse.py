@@ -3,7 +3,7 @@ from needlr.models.workspace import Workspace
 from needlr.models.lakehouse import Lakehouse
 import time
 import pytest
-from azure.storage.filedatalake import (
+from azure.storage.file.datalake import (
     DataLakeServiceClient
 )
 from azure.identity import DefaultAzureCredential

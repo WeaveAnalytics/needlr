@@ -417,6 +417,8 @@ dist
 
 # Virtual Environment
 venv/
+.venvTMO/
 
 # If you are working on test scripts, place them in this directory to avoid being committed
 .ignore
+

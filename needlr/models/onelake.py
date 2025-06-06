@@ -1,6 +1,6 @@
 import uuid
 from pydantic import BaseModel, Field, AliasChoices, computed_field, create_model
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, List
 
 
 # Union[ModelA, ModelB]
@@ -128,3 +128,38 @@ class Shortcut_Target_Create_AzureBlobStorage(BaseModel):
     #         return Shortcut_Target_OneLake(self.target)
     #     # elif values.data.get('type') == 's3Compatible':
     #     #     return Shortcut_S3Compatible(**values)
+
+
+
+
+class PermissionItem(BaseModel):
+    attributeName: str
+    attributeValueIncludedIn: List[str]
+
+
+class DecisionRule(BaseModel):
+    effect: str
+    permission: List[PermissionItem]
+
+
+class FabricItemMember(BaseModel):
+    itemAccess: List[str]
+    sourcePath: str
+
+
+class MicrosoftEntraMember(BaseModel):
+    objectId: str = None
+    objectType: str = None
+    tenantId: str = None
+
+
+class Members(BaseModel):
+    fabricItemMembers: Optional[List[FabricItemMember]] = []
+    microsoftEntraMembers: Optional[List[MicrosoftEntraMember]] = []
+
+
+class OneLakeDataAccessRole(BaseModel):
+    name: str
+    decisionRules: List[DecisionRule]
+    members: Members
+

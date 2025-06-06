@@ -12,6 +12,7 @@ def notebook_test(fc: FabricClient, workspace_test: Workspace, testParameters) -
                             description=testParameters['notebook_description'])
     yield nb
 
+
 @pytest.fixture(scope='session')
 def lakehouse_test(fc: FabricClient, workspace_test:Workspace, testParameters) -> Generator[Lakehouse, None, None]:
     lh = fc.lakehouse.create(display_name=testParameters['lakehouse_name'], 
@@ -19,3 +20,16 @@ def lakehouse_test(fc: FabricClient, workspace_test:Workspace, testParameters) -
                             description=testParameters['lakehouse_description'], 
                             enableSchemas=True)
     yield lh
+
+
+@pytest.fixture(scope='session')
+def onelake_test(fc: FabricClient, workspace_test:Workspace) -> Generator[Lakehouse, None, None]:
+    lh = fc.lakehouse.create(display_name=f"LH_onelake_test", 
+                            workspace_id=workspace_test.id, 
+                            description='Lakehouse for OneLake tests.', 
+                            enableSchemas=True)
+    yield lh
+
+
+
+
