@@ -4,12 +4,13 @@ from needlr.auth.auth import _FabricAuthentication
 
 import uuid
 
-from needlr.models.onelake import Shortcut, Shortcut_Target, OneLakeDataAccessRole
+from needlr.models.onelake import Shortcut, Shortcut_Target, OneLakeDataAccessRole, ShortcutConflictPolicy, Shortcut_Create
 from needlr.models.item import Item
 from needlr import _http
 from needlr._http import FabricResponse
 
 from typing import Literal, List, Iterator
+import json
 
 class _OneLakeClient():
     """
@@ -83,7 +84,8 @@ class _OneLakeClient():
         return resp
     
 
-    def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str, shortcut_target:Shortcut_Target) -> Shortcut:
+    # def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str, shortcut_target:Shortcut_Target, conflict_policy:ShortcutConflictPolicy=ShortcutConflictPolicy.CreateOrOverwrite) -> Shortcut:
+    def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_definition:Shortcut_Create, conflict_policy:ShortcutConflictPolicy=ShortcutConflictPolicy.CreateOrOverwrite) -> Shortcut:
         """
         Creates a new shortcut.
 
@@ -100,16 +102,18 @@ class _OneLakeClient():
         [List shortcuts](https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-shortcuts/list-shortcuts?tabs=HTTP)
         """
 
-        body = {
-            "name": shortcut_name,
-            "path": shortcut_path,
-            "target": {
-                **shortcut_target
-            }
-        }
+        # body = {
+        #     "name": shortcut_name,
+        #     "path": shortcut_path,
+        #     "target": {
+        #         **shortcut_target
+        #     }
+        # }
+
+        body = json.loads(shortcut_definition.model_dump_json())
 
         resp = _http._post_http(
-            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/shortcuts?shortcutConflictPolicy=CreateOrOverwrite",
+            url = f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/shortcuts?shortcutConflictPolicy={conflict_policy.value}",
             auth=self._auth,
             json=body
         )

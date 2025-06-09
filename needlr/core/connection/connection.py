@@ -155,3 +155,25 @@ class _ConnectionClient():
     #         body=body
     #     )
     
+    def ls_supported_connection_types(self) -> Iterator[str]:
+        """
+        List Supported Connection Types
+
+        Retrieves a list of supported connection types.
+
+        Yields:
+            str: A string representing each supported connection type.
+
+        Returns:
+            Iterator[str]: An iterator of supported connection types.
+
+        Reference:
+        [List Supported Connection Types](https://learn.microsoft.com/en-us/rest/api/fabric/core/connections/list-supported-connection-types?tabs=HTTP)
+        """
+        resp = _http._get_http(
+            url=f"{self._base_url}connections/supportedConnectionTypes",
+            auth=self._auth,
+
+        )
+        
+        return [_ for _ in resp.body["value"]]

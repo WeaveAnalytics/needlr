@@ -1,9 +1,16 @@
 import uuid
 from pydantic import BaseModel, Field, AliasChoices, computed_field, create_model
-from typing import Dict, Union, Optional, List, Literal
-
+from typing import Union, Optional, List, Literal
+from enum import Enum
 
 # Union[ModelA, ModelB]
+
+
+class ShortcutConflictPolicy(str, Enum):
+    Abort = 'Abort'
+    CreateOrOverwrite = 'CreateOrOverwrite'
+    GenerateUniqueName = 'GenerateUniqueName'
+    OverwriteOnly = 'OverwriteOnly'
 
 
 class Shortcut_AdlsGen2(BaseModel):
@@ -30,11 +37,6 @@ class Shortcut_Dataverse(BaseModel):
     environmentDomain:str
     tableName:str
 
-
-class Shortcut_ExternalDataShare(BaseModel):
-    connectionId:uuid.UUID
-
-
 class Shortcut_GoogleCloudStorage(BaseModel):
     connectionId:uuid.UUID
     location:str
@@ -53,6 +55,46 @@ class Shortcut_S3Compatible(BaseModel):
     location:str
     subpath:str
 
+
+class Shortcut_Dataverse(BaseModel):
+    connectionId:uuid.UUID
+    deltaLakeFolder:str
+    environmentDomain:str
+    tableName:str
+
+
+# class Shortcut_ExternalDataShare(BaseModel):
+#     connectionId:uuid.UUID
+
+
+class Shortcut_Target_AdlsGen2(BaseModel):
+    adlsGen2: Shortcut_AdlsGen2
+
+class Shortcut_Target_AmazonS3(BaseModel):
+    amazonS3: Shortcut_AmazonS3
+
+class Shortcut_Target_AzureBlobStorage(BaseModel):
+    azureBlobStorage: Shortcut_AzureBlobStorage
+
+class Shortcut_Target_Dataverse(BaseModel):
+    dataverse: Shortcut_Dataverse
+
+class Shortcut_Target_GoogleCloudStorage(BaseModel):
+    googleCloudStorage: Shortcut_GoogleCloudStorage
+
+class Shortcut_Target_OneLake(BaseModel):
+    oneLake: Shortcut_OneLake
+
+class Shortcut_Target_S3Compatible(BaseModel):
+    s3Compatible: Shortcut_S3Compatible
+
+
+class Shortcut_Create(BaseModel):
+    path: str
+    name: str
+    target: Union[Shortcut_Target_AdlsGen2, Shortcut_Target_AmazonS3, Shortcut_Target_AzureBlobStorage
+                  , Shortcut_Target_Dataverse, Shortcut_Target_GoogleCloudStorage
+                  , Shortcut_Target_OneLake, Shortcut_Target_S3Compatible]
 
 
 # class Shortcut_Target_Create(BaseModel):
@@ -131,26 +173,52 @@ class Shortcut_Target_Create_AzureBlobStorage(BaseModel):
 
 
 
+class ObjectType(str, Enum):
+    Group = 'Group'
+    ManagedIdentity = 'ManagedIdentity'
+    ServicePrincipal = 'ServicePrincipal'
+    User = 'User'
+    NoneType = 'None'
+
+
+class ItemAccess(str, Enum):
+    Execute = 'Execute'
+    Explore = 'Explore'
+    Read = 'Read'
+    ReadAll = 'ReadAll'
+    Reshare = 'Reshare'
+    Write = 'Write'
+
+
+class AttributeName(str, Enum):
+    Action = 'Action'
+    Path = 'Path'
+
+
+class Effect(str, Enum):
+    Permit = 'Permit'
+    # Deny = 'Deny'
+
 
 class PermissionItem(BaseModel):
-    attributeName: Literal['Action', 'Path']
+    attributeName: AttributeName
     attributeValueIncludedIn: List[str]
 
 
 class DecisionRule(BaseModel):
-    effect: Literal['Permit']
+    effect: Effect
     permission: List[PermissionItem]
 
 
 class FabricItemMember(BaseModel):
-    itemAccess: List[str]
+    itemAccess: List[ItemAccess]
     sourcePath: str
 
 
 class MicrosoftEntraMember(BaseModel):
-    objectId: str = None
-    objectType: str = None
-    tenantId: str = None
+    objectId: Optional[str] = None
+    objectType: Optional[ObjectType] = None
+    tenantId: Optional[str] = None
 
 
 class Members(BaseModel):
@@ -162,4 +230,5 @@ class OneLakeDataAccessRole(BaseModel):
     name: str
     decisionRules: List[DecisionRule]
     members: Members
+
 
