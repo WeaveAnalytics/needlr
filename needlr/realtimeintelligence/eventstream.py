@@ -10,8 +10,6 @@ from needlr.auth.auth import _FabricAuthentication
 from needlr.models.eventstream import Eventstream
 from needlr.models.item import Item
 
-
-
 class _EvenstreamClient():
     """
 
@@ -22,8 +20,10 @@ class _EvenstreamClient():
     * Create Eventstream > create()
     * Delete Eventstream > delete()
     * Get Eventstream > get()
+    * Get Eventstream Definition > get_definition()
     * List Eventstream > ls()
     * Update Eventstream > update()
+    * Update Eventstream Definition > update_definition()
     * Clone Eventstream > clone()
 
     """
@@ -117,6 +117,28 @@ class _EvenstreamClient():
         eventstream = Eventstream(**resp.body)
         return eventstream
 
+    def get_definition(self, workspace_id:uuid.UUID, eventstream_id:uuid.UUID) -> dict:
+        """
+        Get Eventstream Definition
+
+        Retrieves the definition of a Eventstream from the specified workspace.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace containing the Eventstream.
+            eventstream_id (uuid.UUID): The ID of the Eventstream to retrieve.
+
+        Returns:
+            Eventstream: The retrieved Eventstream definition.
+
+        References:
+            - [Get Eventstream Definition](https://learn.microsoft.com/en-us/rest/api/fabric/eventstream/items/get-eventstream-definition?tabs=HTTP)
+        """
+        resp = _http._post_http_long_running(
+            url = f"{self._base_url}workspaces/{workspace_id}/eventstreams/{eventstream_id}/getDefinition",
+            auth=self._auth
+        )
+        return resp.body['definition']
+
     def ls(self, workspace_id:uuid.UUID) -> Iterator[Eventstream]:
             """
             List Eventstreams
@@ -141,7 +163,7 @@ class _EvenstreamClient():
                 for item in page.items:
                     yield Eventstream(**item)
 
-    def update_definition(self, workspace_id:uuid.UUID, eventstream_id:uuid.UUID, description:str, display_name:str) -> FabricResponse:
+    def update(self, workspace_id:uuid.UUID, eventstream_id:uuid.UUID, description:str, display_name:str) -> Eventstream:
         """
         Update Eventstream
 
@@ -170,8 +192,58 @@ class _EvenstreamClient():
             auth=self._auth,
             item=Item(**body)
         )
-        return resp
+        eventstream = Eventstream(**resp.body)
+        return eventstream
 
+    def update_definition(self, workspace_id:uuid.UUID, eventstream_id:uuid.UUID, definition:dict, updateMetadata:bool = False) -> Eventstream:
+            """
+            Update EventStream Definition
+            Updates the definition of an EventStream for a given workspace and eventstream ID.
+            Args:
+                workspace_id (uuid.UUID): The ID of the workspace.
+                eventstream_id (uuid.UUID): The ID of the eventstream.
+                definition (dict): The new definition for the eventstream.
+                    Sample definition (reading from file):
+                     "definition": {
+                            "parts": [
+                                {
+                                    "path": "eventstream.json",
+                                    "payload": base64.b64encode(open('part0.txt', 'rb').read()).decode('utf-8'),
+                                    "payloadType": "InlineBase64"
+                                },
+                                {
+                                    "path": "eventstreamProperties.json",
+                                    "payload": base64.b64encode(open('part1.txt', 'rb').read()).decode('utf-8'),
+                                    "payloadType": "InlineBase64"
+                                },
+                                {
+                                    "path": ".platform",
+                                    "payload": base64.b64encode(open('part2.txt', 'rb').read()).decode('utf-8'),
+                                    "payloadType": "InlineBase64"
+                                }
+                            ]
+                        }
+            Returns:
+                EventStream: The updated eventstream object.
+            Raises:
+                SomeException: If there is an error updating the eventstream definition.   
+            Reference:
+            - [Update Notebook Definition](https://learn.microsoft.com/en-us/rest/api/fabric/eventstream/items/update-eventstream-definition?tabs=HTTP)
+            """
+            flag = f'?updateMetadata={updateMetadata}' if updateMetadata else ''
+            try:
+                resp = _http._post_http_long_running(
+                    url = f"{self._base_url}workspaces/{workspace_id}/eventstreams/{eventstream_id}/updateDefinition{flag}",
+                    auth=self._auth,
+                    json_par=definition
+                )
+                if resp.is_successful:
+                    return self.get(workspace_id, eventstream_id, include_definition=True)
+                else:
+                        return None
+            except Exception:
+                    raise Exception("Error updating eventstream definition")
+                
     def clone(self, source_workspace_id: uuid.UUID, eventstream_id: uuid.UUID, clone_name: str,  target_workspace_id: Optional[uuid.UUID]) -> Eventstream:
         """
         Clones a Eventstream.

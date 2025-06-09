@@ -12,9 +12,13 @@ class TesteventstreamLifeCycle:
     def test_eventstream_get(self, fc: FabricClient, workspace_test: Workspace, test_eventstream: Eventstream):
         eh = fc.eventstream.get(workspace_id=workspace_test.id, eventstream_id=test_eventstream.id)
         assert eh is not None
+        
+    def test_eventstream_get_definition(self, fc: FabricClient, workspace_test: Workspace, test_eventstream: Eventstream):
+        eh = fc.eventstream.get_definition(workspace_id=workspace_test.id, eventstream_id=test_eventstream.id)
+        assert eh is not None
 
-    def test_eventstream_update_definition(self, fc: FabricClient, workspace_test: Workspace, test_eventstream: Eventstream,testParameters: dict[str, str]):
-        res = fc.eventstream.update_definition(workspace_id=workspace_test.id, eventstream_id=test_eventstream.id, description='New'+testParameters['eventstream_description'], display_name='New'+testParameters['eventstream_name'])
+    def test_eventstream_update(self, fc: FabricClient, workspace_test: Workspace, test_eventstream: Eventstream,testParameters: dict[str, str]):
+        res = fc.eventstream.update(workspace_id=workspace_test.id, eventstream_id=test_eventstream.id, description='New'+testParameters['eventstream_description'], display_name='New'+testParameters['eventstream_name'])
         assert res.is_successful is True
 
     def test_eventstream_clone(self, fc: FabricClient, workspace_test: Workspace, test_eventstream: Eventstream):

@@ -1,0 +1,278 @@
+{
+  "sources": [
+    {
+      "name": "StreamingVehicleTelemetry",
+      "type": "CustomEndpoint",
+      "properties": {}
+    }
+  ],
+  "destinations": [
+    {
+      "name": "VehicleTelemetryEventhouse",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "REPLACE_WITH_YOUR_WORKSPACE_ID",
+        "itemId": "REPLACE_WITH_YOUR_EVENTHOUSE_ID",
+        "databaseName": "REPLACE_WITH_YOUR_EVENTHOUSE_DATABASE_NAME",
+        "tableName": "VehicleTelemetryRaw",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "LogisticsEventstream-stream"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "LogisticsEventstream-stream",
+          "schema": {
+            "columns": [
+              {
+                "name": "EventID",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "JourneyID",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "VehicleID",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DriverID",
+                "type": "Array",
+                "fields": null,
+                "items": {
+                  "name": null,
+                  "type": "Nvarchar(max)",
+                  "fields": null,
+                  "items": null
+                }
+              },
+              {
+                "name": "EventCategoryID",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "timestamp",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "odometer",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "tire_pressure",
+                "type": "Record",
+                "fields": [
+                  {
+                    "name": "1",
+                    "type": "Float",
+                    "fields": null,
+                    "items": null
+                  },
+                  {
+                    "name": "2",
+                    "type": "Float",
+                    "fields": null,
+                    "items": null
+                  },
+                  {
+                    "name": "3",
+                    "type": "Float",
+                    "fields": null,
+                    "items": null
+                  },
+                  {
+                    "name": "4",
+                    "type": "Float",
+                    "fields": null,
+                    "items": null
+                  },
+                  {
+                    "name": "5",
+                    "type": "Float",
+                    "fields": null,
+                    "items": null
+                  },
+                  {
+                    "name": "6",
+                    "type": "Float",
+                    "fields": null,
+                    "items": null
+                  }
+                ],
+                "items": null
+              },
+              {
+                "name": "lat",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "lon",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "vehicle_speed",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "engine_rpm",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "transmission_gear_position",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "gear_lever_position",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "accelerator_pedal_position",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "brake_pedal_position",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "torque_at_transmission",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "engine_temp",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "transmission_temp",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "steering_wheel_angle",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "door_status",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ignition_status",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "headlamp_status",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "high_beam_status",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "windshield_wiper_status",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "fuel_level",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "parking_brake_status",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "name": "LogisticsEventstream-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "StreamingVehicleTelemetry"
+        }
+      ]
+    }
+  ],
+  "operators": [],
+  "compatibilityLevel": "1.0"
+}
