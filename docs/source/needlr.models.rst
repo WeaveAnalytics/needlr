@@ -1,9 +1,6 @@
 needlr.models
 =====================
 
-Submodules
-----------
-
 needlr.models.adminworkspace
 -----------------------------------
 
@@ -84,6 +81,22 @@ needlr.models.item
    :undoc-members:
    :show-inheritance:
 
+needlr.models.jobscheduler
+------------------------------------
+
+.. automodule:: needlr.models.jobscheduler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+needlr.models.kqldashboard
+--------------------------------
+
+.. automodule:: needlr.models.kqldashboard
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 needlr.models.kqldatabase
 --------------------------------
 
@@ -100,6 +113,30 @@ needlr.models.kqlqueryset
    :undoc-members:
    :show-inheritance:
 
+needlr.models.lakehouse
+--------------------------------
+
+.. automodule:: needlr.models.lakehouse
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+needlr.models.mlexperiment
+--------------------------------
+
+.. automodule:: needlr.models.mlexperiment
+   :members:
+   :undoc-members:
+   :show-inheritance:   
+
+needlr.models.mlmodel
+--------------------------------
+
+.. automodule:: needlr.models.mlmodel
+   :members:
+   :undoc-members:
+   :show-inheritance:   
+
 needlr.models.notebook
 -----------------------------
 
@@ -112,6 +149,14 @@ needlr.models.paginatedreport
 ------------------------------------
 
 .. automodule:: needlr.models.paginatedreport
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+needlr.models.reflex
+---------------------------
+
+.. automodule:: needlr.models.reflex
    :members:
    :undoc-members:
    :show-inheritance:
@@ -160,14 +205,6 @@ needlr.models.workspace
 ------------------------------
 
 .. automodule:: needlr.models.workspace
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: needlr.models
    :members:
    :undoc-members:
    :show-inheritance:
