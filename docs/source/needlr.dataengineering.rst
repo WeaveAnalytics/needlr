@@ -1,8 +1,13 @@
 needlr.dataengineering
 ==============================
 
-Submodules
-----------
+needlr.dataengineering.lakehouse
+--------------------------------------
+
+.. automodule:: needlr.dataengineering.lakehouse
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 needlr.dataengineering.notebook
 --------------------------------------
@@ -16,14 +21,6 @@ needlr.dataengineering.sqlendpoints
 ------------------------------------------
 
 .. automodule:: needlr.dataengineering.sqlendpoints
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: needlr.dataengineering
    :members:
    :undoc-members:
    :show-inheritance:

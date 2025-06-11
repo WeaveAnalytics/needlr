@@ -1,9 +1,6 @@
 needlr.datawarehouse
 ============================
 
-Submodules
-----------
-
 needlr.datawarehouse.mirroredwarehouse
 ---------------------------------------------
 
@@ -16,14 +13,6 @@ needlr.datawarehouse.warehouse
 -------------------------------------
 
 .. automodule:: needlr.datawarehouse.warehouse
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: needlr.datawarehouse
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,10 +1,18 @@
 needlr.datascience
 ==========================
 
-Module contents
----------------
+needlr.datascience.mlexperiment
+----------------------------------------
 
-.. automodule:: needlr.datascience
+.. automodule:: needlr.datascience.mlexperiment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+needlr.datascience.mlmodel
+----------------------------------------
+
+.. automodule:: needlr.datascience.mlmodel
    :members:
    :undoc-members:
    :show-inheritance:

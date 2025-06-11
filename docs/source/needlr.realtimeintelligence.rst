@@ -1,9 +1,6 @@
 needlr.realtimeintelligence
 ===================================
 
-Submodules
-----------
-
 needlr.realtimeintelligence.eventhouse
 ---------------------------------------------
 
@@ -20,6 +17,14 @@ needlr.realtimeintelligence.eventstream
    :undoc-members:
    :show-inheritance:
 
+needlr.realtimeintelligence.kqldashboard
+----------------------------------------------
+
+.. automodule:: needlr.realtimeintelligence.kqldashboard
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 needlr.realtimeintelligence.kqldatabase
 ----------------------------------------------
 
@@ -32,14 +37,6 @@ needlr.realtimeintelligence.kqlqueryset
 ----------------------------------------------
 
 .. automodule:: needlr.realtimeintelligence.kqlqueryset
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: needlr.realtimeintelligence
    :members:
    :undoc-members:
    :show-inheritance:
