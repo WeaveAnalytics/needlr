@@ -84,7 +84,6 @@ class _OneLakeClient():
         return resp
     
 
-    # def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_path:str, shortcut_name:str, shortcut_target:Shortcut_Target, conflict_policy:ShortcutConflictPolicy=ShortcutConflictPolicy.CreateOrOverwrite) -> Shortcut:
     def create_shortcut(self, workspace_id:uuid.UUID, item_id:str, shortcut_definition:Shortcut_Create, conflict_policy:ShortcutConflictPolicy=ShortcutConflictPolicy.CreateOrOverwrite) -> Shortcut:
         """
         Creates a new shortcut.
@@ -101,14 +100,6 @@ class _OneLakeClient():
         Reference:
         [List shortcuts](https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-shortcuts/list-shortcuts?tabs=HTTP)
         """
-
-        # body = {
-        #     "name": shortcut_name,
-        #     "path": shortcut_path,
-        #     "target": {
-        #         **shortcut_target
-        #     }
-        # }
 
         body = json.loads(shortcut_definition.model_dump_json())
 

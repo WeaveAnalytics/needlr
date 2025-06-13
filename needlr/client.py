@@ -2,6 +2,7 @@
 from needlr.admin.workspace.adminworkspace import _AdminWorkspaceClient
 from needlr.admin.tenant import _TenantClient
 from needlr.core.workspace.workspace import _WorkspaceClient
+from needlr.core.workspace.role import _WorkspaceRoleClient
 from needlr.core.capacity import _CapacityClient
 from needlr.core.connection import _ConnectionClient
 from needlr.dataengineering.notebook import _NotebookClient
@@ -34,6 +35,7 @@ class FabricClient():
         self._auth = auth
         self._base_url = kwargs.get("base_url") if "base_url" in kwargs else "https://api.fabric.microsoft.com/v1/"
         self.workspace = _WorkspaceClient(auth=auth, base_url=self._base_url)
+        self.workspace_role = _WorkspaceRoleClient(auth=auth, base_url=self._base_url)
         self.capacity = _CapacityClient(auth=auth, base_url=self._base_url)
         self.connection = _ConnectionClient(auth=auth, base_url=self._base_url)
         self.admin_workspaceclient = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)

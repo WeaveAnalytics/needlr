@@ -112,7 +112,10 @@ class _LakehouseClient():
             url = f"{self._base_url}workspaces/{workspace_id}/lakehouses",
             auth=self._auth
         )
-        return resp.body['value']
+
+        for lakehouse in resp.body['value']:
+            yield Lakehouse(**lakehouse)
+            
 
     def get(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> Lakehouse:
         """
@@ -165,7 +168,7 @@ class _LakehouseClient():
         lakehouse = Lakehouse(**resp.body)
         return lakehouse
 
-    def list_tables(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> list:
+    def ls_tables(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> list:
         """
         Lists all tables in the lakehouse.
 
@@ -183,7 +186,9 @@ class _LakehouseClient():
             url = f"{self._base_url}workspaces/{workspace_id}/lakehouses/{lakehouse_id}/tables",
             auth=self._auth
         )
-        return list(resp)[0].items
+        for page in resp:
+            for item in page.items:
+                yield item
 
     def load_table(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID, table_name:str, 
                     relative_path:str, path_type:TABLE_LOAD_PATH_TYPE = 'File', mode:TABLE_LOAD_MODE = 'Overwrite',
