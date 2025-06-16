@@ -4,12 +4,12 @@ from needlr.auth.auth import _FabricAuthentication
 
 import uuid
 
-from needlr.models.lakehouse import Lakehouse, Livy_Session
+from needlr.models.lakehouse import Lakehouse, Livy_Session, Lakehouse_Create
 from needlr.models.item import Item
 from needlr import _http
 from needlr._http import FabricResponse
 
-from typing import Literal
+from typing import Literal, Generator
 
 class _LakehouseClient():
     """
@@ -74,7 +74,7 @@ class _LakehouseClient():
             auth=self._auth,
             item=Item(**body)
         )
-        lakehouse = Lakehouse(**resp.body)
+        lakehouse = Lakehouse_Create(**resp.body)
         return lakehouse
 
     def delete(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> FabricResponse:
@@ -95,7 +95,7 @@ class _LakehouseClient():
 
         return resp
 
-    def ls(self, workspace_id:uuid.UUID) -> list:
+    def ls(self, workspace_id:uuid.UUID) -> Generator[Lakehouse, None, None]:
         """
         Lists all lakehouses.
 
@@ -168,7 +168,7 @@ class _LakehouseClient():
         lakehouse = Lakehouse(**resp.body)
         return lakehouse
 
-    def ls_tables(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> list:
+    def ls_tables(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> Generator[Item, None, None]:
         """
         Lists all tables in the lakehouse.
 
@@ -279,7 +279,7 @@ class _LakehouseClient():
         return resp
     
 
-    def ls_livy_sessions(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> FabricResponse:
+    def ls_livy_sessions(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> Generator[Livy_Session, None, None]:
         """
         Returns a list of livy sessions from the specified item identifier..
 
