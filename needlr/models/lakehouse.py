@@ -26,14 +26,14 @@ class Lakehouse(BaseModel):
     type: str
     workspaceId: str
     id: str
-    properties: Properties
+    properties: Optional[Properties] = None
 
-class Lakehouse_Create(BaseModel):
-    displayName: str
-    description: str
-    type: str
-    workspaceId: str
-    id: str
+# class Lakehouse_Create(BaseModel):
+#     displayName: str
+#     description: str
+#     type: str
+#     workspaceId: str
+#     id: str
 
 
 class Livy_Session(BaseModel):

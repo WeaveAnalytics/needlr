@@ -4,7 +4,7 @@ from needlr.auth.auth import _FabricAuthentication
 
 import uuid
 
-from needlr.models.lakehouse import Lakehouse, Livy_Session, Lakehouse_Create
+from needlr.models.lakehouse import Lakehouse, Livy_Session
 from needlr.models.item import Item
 from needlr import _http
 from needlr._http import FabricResponse
@@ -74,7 +74,7 @@ class _LakehouseClient():
             auth=self._auth,
             item=Item(**body)
         )
-        lakehouse = Lakehouse_Create(**resp.body)
+        lakehouse = Lakehouse(**resp.body)
         return lakehouse
 
     def delete(self, workspace_id:uuid.UUID, lakehouse_id:uuid.UUID) -> FabricResponse:
