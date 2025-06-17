@@ -1,18 +1,10 @@
 needlr.dataactivator
 ============================
 
-Subpackages
------------
+needlr.dataactivator.reflex.reflex
+----------------------------------------
 
-.. toctree::
-   :maxdepth: 4
-
-   needlr.dataactivator.reflex
-
-Module contents
----------------
-
-.. automodule:: needlr.dataactivator
+.. automodule:: needlr.dataactivator.reflex.reflex
    :members:
    :undoc-members:
    :show-inheritance:

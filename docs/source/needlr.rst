@@ -1,12 +1,12 @@
 needlr
 ==============
 
-Subpackages
------------
-
 .. toctree::
    :maxdepth: 4
 
+   needlr.client
+   needlr.models
+   needlr.admin
    needlr.auth
    needlr.core
    needlr.dataactivator
@@ -15,25 +15,5 @@ Subpackages
    needlr.datascience
    needlr.datawarehouse
    needlr.industrysolutions
-   needlr.models
    needlr.powerbi
    needlr.realtimeintelligence
-
-Submodules
-----------
-
-needlr.client
---------------------
-
-.. automodule:: needlr.client
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: needlr
-   :members:
-   :undoc-members:
-   :show-inheritance:
