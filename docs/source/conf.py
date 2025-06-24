@@ -7,9 +7,9 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'needlr'
-copyright = '2025, Tonio Lora, Tim Brown, Emily Nguyen, Bret Myers, Will Johnson, Pardeep Singla'
-author = 'Tonio Lora, Tim Brown, Emily Nguyen, Bret Myers, Will Johnson, Pardeep Singla'
-release = '0.1.8'
+copyright = '2025, Tonio Lora, Tim Brown, Emily Nguyen, Bret Myers, Will Johnson'
+author = 'Tonio Lora, Tim Brown, Emily Nguyen, Bret Myers, Will Johnson'
+release = '0.2.1'
 
 ## -- Set Path -----------------------------------------------------
 import os
@@ -25,13 +25,17 @@ extensions = ['sphinx.ext.duration',
               'sphinx.ext.autodoc',
               'sphinx.ext.autosummary']
 
+autodoc_default_options = {
+    "members": True,
+    "undoc-members": False,
+    "private-members": True,
+}
+
 templates_path = ['_templates']
 exclude_patterns = []
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'furo'
 html_static_path = ['_static']
