@@ -5,11 +5,6 @@ from needlr.models.item import ItemType, Item
 
 
 
-# class Lakehouse(Item):
-#     name: str = Field(validation_alias=AliasChoices('displayName'))
-#     type: ItemType = ItemType.Lakehouse
-
-
 class SqlEndpointProperties(BaseModel):
     connectionString: str
     id: str
@@ -27,13 +22,6 @@ class Lakehouse(BaseModel):
     workspaceId: str
     id: str
     properties: Optional[Properties] = None
-
-# class Lakehouse_Create(BaseModel):
-#     displayName: str
-#     description: str
-#     type: str
-#     workspaceId: str
-#     id: str
 
 
 class Livy_Session(BaseModel):
